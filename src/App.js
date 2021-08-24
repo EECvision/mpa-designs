@@ -1,23 +1,46 @@
-import logo from './logo.svg';
 import './App.css';
+import MpaBuilder from './components/map-builder/builder';
+import MpaLoader from './components/mpa-loader/loader';
+
+import { useState, useEffect } from 'react';
 
 function App() {
+  const [show, setShow] = useState(true);
+  const [build, setBuild] = useState(true);
+
+  let timeout = null;
+
+  useEffect(()=> {
+    if(show){
+       timeout = setTimeout(() => {
+        setBuild(false)
+      }, 10000);
+    }else {
+      clearTimeout(timeout)
+      setBuild(true)
+    }
+  },[show]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <div className="button-container">
+        <button onClick={() => setShow(!show)}>{show ? 'Show Loader' : 'Show Buider'}</button>
+      </div>
+
+      {
+        show
+          ?
+          <div>
+            {
+              build
+                ?
+                <MpaBuilder />
+                :
+                <div className="homepage">This is the Home Page</div>
+            }
+          </div>
+          : <MpaLoader />
+      }
     </div>
   );
 }
